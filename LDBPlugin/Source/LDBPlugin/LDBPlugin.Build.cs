@@ -11,6 +11,7 @@ public class LDBPlugin : ModuleRules
 		PublicIncludePaths.AddRange(
 			new string[] {
 				// ... add public include paths required here ...
+
 			}
 			);
 				
@@ -37,6 +38,8 @@ public class LDBPlugin : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
+                "LDBPluginSnappy",
+                "LDBPluginLevelDB"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
