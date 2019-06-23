@@ -21,12 +21,12 @@ public class LDBPlugin : ModuleRules
 				// ... add other private include paths required here ...
 			}
 			);
-			
-		
-		PublicDependencyModuleNames.AddRange(
+
+        PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
 				"Core",
+                "CoreUObject",
 				"Projects",
 				"LDBPluginSnappy",
 				"LDBPluginLevelDB"
@@ -51,5 +51,7 @@ public class LDBPlugin : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
-	}
+
+        PrivateIncludePathModuleNames.AddRange(new string[] { "LDBPluginSnappy", "LDBPluginLevelDB" });
+    }
 }

@@ -9,19 +9,17 @@ public class LDBPluginLevelDB : ModuleRules
 	{
 		Type = ModuleType.External;
 
+		PublicLibraryPaths.Add(Path.Combine(ModuleDirectory, "lib"));
+        PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "include"));
+
 		if (Target.Platform == UnrealTargetPlatform.Win64)
 		{
-			// Add the import library
-			PublicLibraryPaths.Add(Path.Combine(ModuleDirectory, "lib"));
-			PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "include"));
 			PublicAdditionalLibraries.Add("leveldb.lib");
-
-			// Delay-load the DLL, so we can load it from the right place first
-			//PublicDelayLoadDLLs.Add("ExampleLibrary.dll");
 		}
         else if (Target.Platform == UnrealTargetPlatform.Linux)
         {
-            //PublicDelayLoadDLLs.Add(Path.Combine(ModuleDirectory, "Mac", "Release", "libExampleLibrary.dylib"));
+            PublicAdditionalLibraries.Add("leveldb");
+           // PublicDelayLoadDLLs.Add("libleveldb.so.1.22.0");
         }
 	}
 }
