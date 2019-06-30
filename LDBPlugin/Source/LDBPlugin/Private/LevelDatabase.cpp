@@ -2,6 +2,7 @@
 
 
 #include "LevelDatabase.h"
+#include "Paths.h"
 
 ULevelDatabase::ULevelDatabase()
 {
@@ -17,7 +18,10 @@ bool ULevelDatabase::Open(FString databaseName, bool bCreateIfNotFound)
 {
 	leveldb::Options options;
 	options.create_if_missing = bCreateIfNotFound;
-	status = leveldb::DB::Open(options, std::string(TCHAR_TO_UTF8(*databaseName)), &db);
+
+	FString fullDBname = FPaths::ProjectSavedDir() + databaseName;
+
+	status = leveldb::DB::Open(options, std::string(TCHAR_TO_UTF8(*fullDBname)), &db);
 	return status.ok();
 }
 
@@ -28,7 +32,10 @@ void ULevelDatabase::Put(FString key, FString value)
 
 void ULevelDatabase::Put(std::string key, std::string value)
 {
-	status = db->Put(leveldb::WriteOptions(), key,value);
+	if(db)
+		status = db->Put(leveldb::WriteOptions(), key,value);
+	else
+		UE_LOG(LogTemp, Warning, TEXT("Error DB is invalid."));
 }
 
 FString ULevelDatabase::Get(FString key)
@@ -44,3 +51,21 @@ std::string ULevelDatabase::Get(std::string key)
 	status = db->Get(leveldb::ReadOptions(), key, &out);
 	return out;
 }
+
+FString ULevelDatabase::GetChecked(FString key, bool & success)
+{
+	std::string out;
+	status = db->Get(leveldb::ReadOptions(), std::string(TCHAR_TO_UTF8(*key)), &out);
+	success = !status.IsNotFound();
+	return FString(out.c_str());
+}
+
+std::string ULevelDatabase::GetChecked(std::string key, bool & success)
+{
+	std::string out;
+	status = db->Get(leveldb::ReadOptions(), key, &out);
+	success = !status.IsNotFound();
+	return out;
+}
+
+

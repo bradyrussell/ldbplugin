@@ -29,6 +29,10 @@ public:
 	FString Get(FString key);
 	std::string Get(std::string key);
 
-	leveldb::DB* db;
+	UFUNCTION(BlueprintCallable)
+	FString GetChecked(FString key, bool &success);
+	std::string GetChecked(std::string key, bool &success);
+
+	leveldb::DB *db;
 	leveldb::Status status;
 };
